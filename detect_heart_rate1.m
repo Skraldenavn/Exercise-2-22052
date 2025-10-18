@@ -1,7 +1,7 @@
 function bpm = detect_heart_rate1(ecg, fs)
 
-    % Maybe normalize, doesn't look too good i think. Perform xcorr, test coeff
-    %ecg_signal = ecg_signal - mean(ecg_signal); % optional
+    % Maybe normalize. Perform xcorr, test coeff
+    ecg = ecg - mean(ecg);
     [r, lags] = xcorr(ecg); % , 'coeff', see page 336 in textbook
 
     % Make min/max heart rate range
@@ -21,7 +21,7 @@ function bpm = detect_heart_rate1(ecg, fs)
     peak_lag = peak_i + min_lag - 1;
 
     % Find bpm
-    bpm = 60 * fs / peak_lag;
+    bpm = 60 / (peak_lag / fs);
 
     figure;
     plot(lags/fs, r); % x-axis in seconds
@@ -33,25 +33,25 @@ function bpm = detect_heart_rate1(ecg, fs)
     grid on;
     legend('Autocorrelation signal', 'First local max after global max');
 
-    figure;
-    plot(lags/fs, r); % x-axis in seconds
-    hold on;
-    xline(peak_lag/fs, 'r');
-    xlabel('Lag \tau (seconds)');
-    ylabel('Autocorrelation');
-    title(['Near zero lag zoomed']);
-    grid on;
-    xlim([-0.1 0.3]);
-    legend('Autocorrelation signal', 'First local max after global max');
+%     figure;
+%     plot(lags/fs, r); % x-axis in seconds
+%     hold on;
+%     xline(peak_lag/fs, 'r');
+%     xlabel('Lag \tau (seconds)');
+%     ylabel('Autocorrelation');
+%     title(['Near zero lag zoomed']);
+%     grid on;
+%     xlim([-0.1 0.3]);
+%     legend('Autocorrelation signal', 'First local max after global max');
 
-    figure;
-    plot(lags/fs, r); % x-axis in seconds
-    hold on;
-    xline(peak_lag/fs, 'r');
-    xlabel('Lag \tau (seconds)');
-    ylabel('Autocorrelation');
-    title(['First peak zoomed']);
-    grid on;
-    xlim([0.2 1.7]);
-    legend('Autocorrelation signal', 'First local max after global max');
-end
+%     figure;
+%     plot(lags/fs, r); % x-axis in seconds
+%     hold on;
+%     xline(peak_lag/fs, 'r');
+%     xlabel('Lag \tau (seconds)');
+%     ylabel('Autocorrelation');
+%     title(['First peak zoomed']);
+%     grid on;
+%     xlim([0.2 1.7]);
+%     legend('Autocorrelation signal', 'First local max after global max');
+% end
